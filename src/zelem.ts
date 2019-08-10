@@ -28,6 +28,15 @@ export class Zelem {
         return this.rtm.start();
     }
 
+    tryAsk(question: string) {
+        if (
+            question.endsWith('?') &&
+            !this.messageIsInProgress()
+        ) {
+            this.askQuestion(question);
+        }
+    }
+
     private async handleMessage(message: MessageEvent): Promise<void> {
         if (this.messageIsFromABot(message)) {
             return;
@@ -57,28 +66,31 @@ export class Zelem {
         }
 
         if (this.messageIsACallForWisdom(message)) {
-            if (this.messageIsInProgress()) {
-                return;
-            }
-
-            const channel = this.idsByChannel.get('weegee');
-            const letter = String.fromCharCode(65+Math.floor(Math.random() * 26));
-
-            this.currentQuestion = message.text;
-            this.currentMessage = letter;
-
-            await this.wc.chat.postMessage({
-                text: message.text,
-                channel: channel
-            });
-
-            await this.wc.chat.postMessage({
-                text: letter,
-                channel: channel
-            });
-
+            await this.askQuestion(message.text);
             return;
         }
+    }
+
+    private async askQuestion(messageText: string) {
+        if (this.messageIsInProgress()) {
+            return;
+        }
+
+        const channel = this.idsByChannel.get('weegee');
+        const letter = String.fromCharCode(65+Math.floor(Math.random() * 26));
+
+        this.currentQuestion = messageText;
+        this.currentMessage = letter;
+
+        await this.wc.chat.postMessage({
+            text: messageText,
+            channel: channel
+        });
+
+        await this.wc.chat.postMessage({
+            text: letter,
+            channel: channel
+        });
     }
 
     private messageIsFromABot(message: MessageEvent) {
