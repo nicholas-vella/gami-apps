@@ -1,0 +1,20 @@
+{
+  "name": "gami-apps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.js",
+    "watch": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "the gami bois",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@slack/rtm-api": "^5.0.2",
+    "@slack/web-api": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
