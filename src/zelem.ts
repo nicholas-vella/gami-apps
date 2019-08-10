@@ -21,8 +21,8 @@ export class Zelem {
             this.idsByChannel.set(channel.name, channel.id);
         });
 
-        this.rtm.on('message', (messageEvent: MessageEvent) => {
-            this.handleMessage(messageEvent);
+        this.rtm.on('message', (message: MessageEvent) => {
+            this.handleMessage(message);
         });
 
         return this.rtm.start();
