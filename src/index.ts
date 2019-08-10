@@ -23,26 +23,28 @@ function main() {
     });
 
     app.post('/zelem/goodbye', function (req, res) {
-        zel.tryGoodbye();
+        zel.tryGoodbye(req.body['user_id']);
+
         res.send();
     });
 
     app.post('/zelem', function (req, res) {
         const question = req.body.text;
-        console.log(question);
 
         if (
-            typeof question === 'string' &&
-            (question as string).trim().length > 0
+            typeof question === 'undefined' ||
+            (question as string).trim().length < 1
         ) {
-            zel.tryAsk(question);
+            return;
         }
+
+        zel.tryAsk(question);
 
         res.send();
     });
     
     app.listen(process.env.PORT || 3000);
-    
+
     keepAlive();
 }
 

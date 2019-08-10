@@ -1,6 +1,6 @@
 import { RTMClient } from "@slack/rtm-api";
 import { WebClient, WebAPICallResult } from '@slack/web-api';
-import { MessageEvent } from './MessageEvent';
+import { MessageEvent } from './message-event';
 
 const token = process.env['SLACK_KEY'];
 
@@ -12,6 +12,7 @@ export class Zelem {
 
     private currentQuestion: string = undefined;
     private currentMessage: string = undefined;
+    private lastMessageUser: string = undefined;
 
     async start(): Promise<WebAPICallResult> {
         const { channels } = await this.wc.channels.list();
@@ -37,9 +38,12 @@ export class Zelem {
         }
     }
 
-    tryGoodbye() {
-        if (this.messageIsInProgress()) {
-            this.sayGoodbye();
+    tryGoodbye(user: string) {
+        if (
+            this.messageIsInProgress() &&
+            this.lastMessageIsNotFrom(user)
+        ) {
+            this.sayGoodbye(user);
         }
     }
 
@@ -49,15 +53,18 @@ export class Zelem {
         }
 
         if (this.messageIsComplete(message)) {
-            await this.sayGoodbye();
+            await this.sayGoodbye(message.user);
 
             return;
         }
 
         if (this.messageIsDivine(message)) {
-            if (this.messageIsInProgress()) {
+            if (
+                this.messageIsInProgress() &&
+                this.lastMessageIsNotFrom(message.user)
+            ) {
                 this.currentMessage = this.currentMessage.concat(message.text.toUpperCase());
-                console.log(this.currentMessage);
+                this.lastMessageUser = message.user;
             }
 
             return;
@@ -69,14 +76,15 @@ export class Zelem {
         }
     }
 
-    private async sayGoodbye() {
+    private async sayGoodbye(byUser: string) {
         const channel = this.idsByChannel.get('weegee');
         await this.wc.chat.postMessage({
-            text: `${this.currentQuestion}\n${this.currentMessage}`,
+            text: `${this.currentQuestion} (ended by <@${byUser}>)\n${this.currentMessage}`,
             channel: channel
         });
         this.currentMessage = undefined;
         this.currentMessage = undefined;
+        this.lastMessageUser = undefined;
     }
 
     private async askQuestion(messageText: string) {
@@ -101,6 +109,10 @@ export class Zelem {
         });
     }
 
+    private lastMessageIsNotFrom(user: string): boolean {
+        return this.lastMessageUser != user;
+    }
+
     private messageIsFromABot(message: MessageEvent) {
         return message.subtype === 'bot_message';
     }
@@ -122,6 +134,7 @@ export class Zelem {
 
     private messageIsComplete(message: MessageEvent): boolean {
         return this.messageIsInProgress() &&
+            this.lastMessageIsNotFrom(message.user) &&
             message.text.toLowerCase() == 'goodbye';
     }
 }
