@@ -2,7 +2,7 @@ import { RTMClient } from "@slack/rtm-api";
 import { WebClient, WebAPICallResult } from '@slack/web-api';
 import { MessageEvent } from './MessageEvent';
 
-const token = "xoxb-201130141489-710938159106-K7vmCjAh1rxysbTXC3iyYu78";
+const token = process.env['SLACK_KEY'];
 
 export class Zelem {
     private wc = new WebClient(token);
