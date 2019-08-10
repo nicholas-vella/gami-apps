@@ -17,6 +17,11 @@ function main() {
         res.send('Sup');
     });
 
+    app.post('/zelem/goodbye', function (req, res) {
+        zel.tryGoodbye();
+        res.send();
+    });
+
     app.post('/zelem', function (req, res) {
         const question = req.body.text;
         console.log(question);

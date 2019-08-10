@@ -37,21 +37,19 @@ export class Zelem {
         }
     }
 
+    tryGoodbye() {
+        if (this.messageIsInProgress()) {
+            this.sayGoodbye();
+        }
+    }
+
     private async handleMessage(message: MessageEvent): Promise<void> {
         if (this.messageIsFromABot(message)) {
             return;
         }
 
         if (this.messageIsComplete(message)) {
-            const channel = this.idsByChannel.get('weegee');
-
-            await this.wc.chat.postMessage({
-                text: `${this.currentQuestion}\n${this.currentMessage}`,
-                channel: channel
-            });
-
-            this.currentMessage = undefined;
-            this.currentMessage = undefined;
+            await this.sayGoodbye();
 
             return;
         }
@@ -69,6 +67,16 @@ export class Zelem {
             await this.askQuestion(message.text);
             return;
         }
+    }
+
+    private async sayGoodbye() {
+        const channel = this.idsByChannel.get('weegee');
+        await this.wc.chat.postMessage({
+            text: `${this.currentQuestion}\n${this.currentMessage}`,
+            channel: channel
+        });
+        this.currentMessage = undefined;
+        this.currentMessage = undefined;
     }
 
     private async askQuestion(messageText: string) {
