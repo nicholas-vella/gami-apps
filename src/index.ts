@@ -1,6 +1,11 @@
 import { Zelem } from './zelem';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import axios from 'axios';
+
+const MINUTE = 60 * 1000;
+
+main();
 
 function main() {
     const app = express();
@@ -37,6 +42,12 @@ function main() {
     });
     
     app.listen(process.env.PORT || 3000);
+    
+    keepAlive();
 }
 
-main();
+function keepAlive() {
+    setInterval(async () => {
+        await axios.get('https://gami-apps.herokuapp.com');
+    },  25 * MINUTE);
+}
