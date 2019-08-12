@@ -79,7 +79,7 @@ export class Zelem {
     private async sayGoodbye(byUser: string) {
         const channel = this.idsByChannel.get('weegee');
         await this.wc.chat.postMessage({
-            text: `${this.currentQuestion} (ended by <@${byUser}>)\n${this.currentMessage}`,
+            text: `Zelem says: *${this.currentMessage}*. (Ended by <@${byUser}>)`,
             channel: channel
         });
         this.currentMessage = undefined;
