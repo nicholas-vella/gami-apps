@@ -1,14 +1,14 @@
-import { RTMClient } from "@slack/rtm-api";
+import { RTMClient } from '@slack/rtm-api';
 import { WebClient, WebAPICallResult } from '@slack/web-api';
-import { MessageEvent } from '../_models/message-event';
-import { ZELEM_SLACK_KEY } from "../../development-environment";
 import * as express from 'express';
 
-const token = process.env['ZELEM_SLACK_KEY'] || ZELEM_SLACK_KEY;
+import { MessageEvent } from '../_models/message-event';
+
 
 export class Zelem {
-    private wc = new WebClient(token);
-    private rtm = new RTMClient(token);
+    private readonly token = process.env['ZELEM_SLACK_KEY'];
+    private wc = new WebClient(this.token);
+    private rtm = new RTMClient(this.token);
     private channelsById = new Map<string, string>();
     private idsByChannel = new Map<string, string>();
 

@@ -1,10 +1,12 @@
-import { Zelem } from './zelem';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import axios from 'axios';
 
+import { Zelem } from './zelem';
+
 const MINUTE = 60 * 1000;
 
+require('dotenv').config();
 main();
 
 function main() {
