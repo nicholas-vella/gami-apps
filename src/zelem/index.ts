@@ -1,12 +1,14 @@
-import { RTMClient } from "@slack/rtm-api";
+import { RTMClient } from '@slack/rtm-api';
 import { WebClient, WebAPICallResult } from '@slack/web-api';
-import { MessageEvent } from './message-event';
+import * as express from 'express';
 
-const token = process.env['SLACK_KEY'];
+import { MessageEvent } from '../_models/message-event';
+
 
 export class Zelem {
-    private wc = new WebClient(token);
-    private rtm = new RTMClient(token);
+    private readonly token = process.env['ZELEM_SLACK_KEY'];
+    private wc = new WebClient(this.token);
+    private rtm = new RTMClient(this.token);
     private channelsById = new Map<string, string>();
     private idsByChannel = new Map<string, string>();
 
@@ -14,7 +16,8 @@ export class Zelem {
     private currentMessage: string = undefined;
     private lastMessageUser: string = undefined;
 
-    async start(): Promise<WebAPICallResult> {
+    async start(app: express.Express): Promise<WebAPICallResult> {
+        this.registerEndpoints(app);
         const { channels } = await this.wc.channels.list();
 
         (channels as any[]).forEach(channel => {
@@ -29,7 +32,30 @@ export class Zelem {
         return this.rtm.start();
     }
 
-    tryAsk(question: string) {
+    private registerEndpoints(app: express.Express) {
+        app.post('/zelem/goodbye', (req, res) => {
+            this.tryGoodbye(req.body['user_id']);
+
+            res.send();
+        });
+
+        app.post('/zelem', (req, res) => {
+            const question = req.body.text;
+
+            if (
+                typeof question === 'undefined' ||
+                (question as string).trim().length < 1
+            ) {
+                return;
+            }
+
+            this.tryAsk(question);
+
+            res.send();
+        });
+    }
+
+    private tryAsk(question: string) {
         if (
             question.endsWith('?') &&
             !this.messageIsInProgress()
@@ -38,7 +64,7 @@ export class Zelem {
         }
     }
 
-    tryGoodbye(user: string) {
+    private tryGoodbye(user: string) {
         if (
             this.messageIsInProgress() &&
             this.lastMessageIsNotFrom(user)

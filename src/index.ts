@@ -1,47 +1,28 @@
-import { Zelem } from './zelem';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import axios from 'axios';
 
+import { Zelem } from './zelem';
+
 const MINUTE = 60 * 1000;
 
+require('dotenv').config();
 main();
 
 function main() {
     const app = express();
     app.use(bodyParser.urlencoded({ extended: true }));
-
-    const zel = new Zelem();
-
-    (async () => {
-        await zel.start();
-        console.log('Connected');
-    })();
     
     app.get('/', function (req, res) {
         res.send('Sup');
     });
 
-    app.post('/zelem/goodbye', function (req, res) {
-        zel.tryGoodbye(req.body['user_id']);
+    const zel = new Zelem();
 
-        res.send();
-    });
-
-    app.post('/zelem', function (req, res) {
-        const question = req.body.text;
-
-        if (
-            typeof question === 'undefined' ||
-            (question as string).trim().length < 1
-        ) {
-            return;
-        }
-
-        zel.tryAsk(question);
-
-        res.send();
-    });
+    (async () => {
+        await zel.start(app);
+        console.log('Connected');
+    })();
     
     app.listen(process.env.PORT || 3000);
 
