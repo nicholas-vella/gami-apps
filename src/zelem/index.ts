@@ -4,7 +4,7 @@ import { MessageEvent } from '../_models/message-event';
 import { ZELEM_SLACK_KEY } from "../../development-environment";
 import * as express from 'express';
 
-const token = process.env['SLACK_KEY'] || ZELEM_SLACK_KEY;
+const token = process.env['ZELEM_SLACK_KEY'] || ZELEM_SLACK_KEY;
 
 export class Zelem {
     private wc = new WebClient(token);
