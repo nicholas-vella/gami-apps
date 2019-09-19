@@ -1,8 +1,9 @@
 import { RTMClient } from "@slack/rtm-api";
 import { WebClient, WebAPICallResult } from '@slack/web-api';
-import { MessageEvent } from './message-event';
+import { MessageEvent } from '../message-event';
+import { ZELEM_SLACK_KEY } from "../../development-environment";
 
-const token = process.env['SLACK_KEY'];
+const token = process.env['SLACK_KEY'] || ZELEM_SLACK_KEY;
 
 export class Zelem {
     private wc = new WebClient(token);
