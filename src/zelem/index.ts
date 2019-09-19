@@ -2,6 +2,7 @@ import { RTMClient } from "@slack/rtm-api";
 import { WebClient, WebAPICallResult } from '@slack/web-api';
 import { MessageEvent } from '../_models/message-event';
 import { ZELEM_SLACK_KEY } from "../../development-environment";
+import * as express from 'express';
 
 const token = process.env['SLACK_KEY'] || ZELEM_SLACK_KEY;
 
@@ -15,7 +16,8 @@ export class Zelem {
     private currentMessage: string = undefined;
     private lastMessageUser: string = undefined;
 
-    async start(): Promise<WebAPICallResult> {
+    async start(app: express.Express): Promise<WebAPICallResult> {
+        this.registerEndpoints(app);
         const { channels } = await this.wc.channels.list();
 
         (channels as any[]).forEach(channel => {
@@ -30,7 +32,30 @@ export class Zelem {
         return this.rtm.start();
     }
 
-    tryAsk(question: string) {
+    private registerEndpoints(app: express.Express) {
+        app.post('/zelem/goodbye', (req, res) => {
+            this.tryGoodbye(req.body['user_id']);
+
+            res.send();
+        });
+
+        app.post('/zelem', (req, res) => {
+            const question = req.body.text;
+
+            if (
+                typeof question === 'undefined' ||
+                (question as string).trim().length < 1
+            ) {
+                return;
+            }
+
+            this.tryAsk(question);
+
+            res.send();
+        });
+    }
+
+    private tryAsk(question: string) {
         if (
             question.endsWith('?') &&
             !this.messageIsInProgress()
@@ -39,7 +64,7 @@ export class Zelem {
         }
     }
 
-    tryGoodbye(user: string) {
+    private tryGoodbye(user: string) {
         if (
             this.messageIsInProgress() &&
             this.lastMessageIsNotFrom(user)
