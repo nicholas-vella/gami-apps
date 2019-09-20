@@ -45,6 +45,8 @@ export async function displaySentience(ask?: (string) => Promise<void>) {
         ask(questions.pop());
     };
 
+    await askQuestion();
+
     (function loop() {
         const delay = HOUR + Math.round((Math.random() * (100 * MINUTE)));
         console.log(`Asking a question in ${delay}ms`);
