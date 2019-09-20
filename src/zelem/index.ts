@@ -30,7 +30,7 @@ export class Zelem {
             this.handleMessage(message);
         });
 
-        displaySentience(this.askQuestion);
+        displaySentience(this);
 
         return this.rtm.start();
     }
@@ -116,7 +116,7 @@ export class Zelem {
         this.lastMessageUser = undefined;
     }
 
-    private async askQuestion(messageText: string) {
+    async askQuestion(messageText: string) {
         if (this.messageIsInProgress()) {
             return;
         }

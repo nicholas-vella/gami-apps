@@ -2,12 +2,13 @@ import axios from 'axios';
 const shuffle = require('shuffle-array');
 
 import { TotallyOriginalQuestion } from './original-question';
+import { Zelem } from '.';
 
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
 
-export async function displaySentience(ask?: (string) => Promise<void>) {
+export async function displaySentience(zelem: Zelem) {
     let token: string;
     let questions: TotallyOriginalQuestion[] = [];
 
@@ -42,7 +43,7 @@ export async function displaySentience(ask?: (string) => Promise<void>) {
             questions = await getQuestions();
         }
 
-        ask(questions.pop());
+        zelem.askQuestion(questions.pop().title);
     };
 
     await askQuestion();
