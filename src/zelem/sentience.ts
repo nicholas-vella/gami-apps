@@ -39,7 +39,8 @@ export async function displaySentience(zelem: Zelem) {
     }
 
     const askQuestion = async () => {
-        if (questions.length < 0) {
+        if (questions.length < 1) {
+            console.log('Thinking of some thoughts.');
             questions = await getQuestions();
         }
 
