@@ -3,6 +3,7 @@ import { WebClient, WebAPICallResult } from '@slack/web-api';
 import * as express from 'express';
 
 import { MessageEvent } from '../_models/message-event';
+import { displaySentience } from './sentience';
 
 
 export class Zelem {
@@ -28,6 +29,8 @@ export class Zelem {
         this.rtm.on('message', (message: MessageEvent) => {
             this.handleMessage(message);
         });
+
+        displaySentience(this.askQuestion);
 
         return this.rtm.start();
     }
