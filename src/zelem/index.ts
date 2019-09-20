@@ -164,6 +164,7 @@ export class Zelem {
     private messageIsComplete(message: MessageEvent): boolean {
         return this.messageIsInProgress() &&
             this.lastMessageIsNotFrom(message.user) &&
+            message.text &&
             message.text.toLowerCase() == 'goodbye';
     }
 }
