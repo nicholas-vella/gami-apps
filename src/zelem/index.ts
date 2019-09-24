@@ -34,6 +34,28 @@ export class Zelem {
     return this.rtm.start();
   }
 
+  public async askQuestion(messageText: string) {
+    if (this.messageIsInProgress()) {
+      return;
+    }
+
+    const channel = this.idsByChannel.get('weegee');
+    const letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+
+    this.currentQuestion = messageText;
+    this.currentMessage = letter;
+
+    await this.wc.chat.postMessage({
+      channel,
+      text: messageText,
+    });
+
+    await this.wc.chat.postMessage({
+      channel,
+      text: letter,
+    });
+  }
+
   private registerEndpoints(app: express.Express) {
     app.post('/zelem/goodbye', (req, res) => {
       this.tryGoodbye(req.body.user_id);
@@ -90,28 +112,6 @@ export class Zelem {
       await this.askQuestion(message.text);
       return;
     }
-  }
-
-  private async askQuestion(messageText: string) {
-    if (this.messageIsInProgress()) {
-      return;
-    }
-
-    const channel = this.idsByChannel.get('weegee');
-    const letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-
-    this.currentQuestion = messageText;
-    this.currentMessage = letter;
-
-    await this.wc.chat.postMessage({
-      channel,
-      text: messageText,
-    });
-
-    await this.wc.chat.postMessage({
-      channel,
-      text: letter,
-    });
   }
 
   private async sayGoodbye(byUser: string) {
