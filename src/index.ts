@@ -1,6 +1,6 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import axios from 'axios';
+import * as bodyParser from 'body-parser';
+import * as express from 'express';
 
 import { Zelem } from './zelem';
 
