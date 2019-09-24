@@ -1,27 +1,27 @@
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import axios from "axios";
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import axios from 'axios';
 
-import { Zelem } from "./zelem";
+import { Zelem } from './zelem';
 
 const MINUTE = 60 * 1000;
 
-require("dotenv").config();
+require('dotenv').config();
 main();
 
 function main() {
   const app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.get("/", function(req, res) {
-    res.send("Sup");
+  app.get('/', function(req, res) {
+    res.send('Sup');
   });
 
   const zel = new Zelem();
 
   (async () => {
     await zel.start(app);
-    console.log("Connected");
+    console.log('Connected');
   })();
 
   app.listen(process.env.PORT || 3000);
@@ -31,6 +31,6 @@ function main() {
 
 function keepAlive() {
   setInterval(async () => {
-    await axios.get("https://gami-apps.herokuapp.com");
+    await axios.get('https://gami-apps.herokuapp.com');
   }, 25 * MINUTE);
 }
