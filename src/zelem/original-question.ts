@@ -1,7 +1,7 @@
 export class TotallyOriginalQuestion {
-    title: string;
+  public title: string;
 
-    constructor({ title }) {
-        this.title = '' + title;
-    }
+  constructor({ title }) {
+    this.title = '' + title;
+  }
 }
