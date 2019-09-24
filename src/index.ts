@@ -6,8 +6,6 @@ import { Zelem } from './zelem';
 
 const MINUTE = 60 * 1000;
 
-const test;
-
 require('dotenv').config();
 main();
 
