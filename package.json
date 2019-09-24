@@ -4,14 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "foo": "echo \"fooo\" && exit 0",
     "lint:staged": "lint-staged",
     "start": "ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon"
   },
   "pre-commit": [
-    "foo",
     "lint:staged"
   ],
   "lint-staged": {
