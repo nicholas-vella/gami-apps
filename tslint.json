@@ -4,6 +4,12 @@
   "jsRules": {},
   "rules": {
     "no-console": false,
+    "prefer-const": [
+      true,
+      {
+        "destructuring": "all"
+      }
+    ],
     "quotemark": [true, "single"]
   },
   "rulesDirectory": []
