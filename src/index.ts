@@ -1,19 +1,20 @@
 import axios from 'axios';
 import * as bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 import * as express from 'express';
 
 import { Zelem } from './zelem';
 
 const MINUTE = 60 * 1000;
 
-require('dotenv').config();
+dotenv.config();
 main();
 
 function main() {
   const app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.get('/', function(req, res) {
+  app.get('/', (req, res) => {
     res.send('Sup');
   });
 
