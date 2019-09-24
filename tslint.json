@@ -4,6 +4,7 @@
   "jsRules": {},
   "rules": {
     "arrow-parens": [true, "ban-single-arg-parens"],
+    "member-access": [true, "no-public"],
     "no-console": false,
     "prefer-const": [
       true,

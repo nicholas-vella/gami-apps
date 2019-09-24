@@ -16,7 +16,7 @@ export class Zelem {
   private currentMessage: string = undefined;
   private lastMessageUser: string = undefined;
 
-  public async start(app: express.Express): Promise<WebAPICallResult> {
+  async start(app: express.Express): Promise<WebAPICallResult> {
     this.registerEndpoints(app);
     const { channels } = await this.wc.channels.list();
 
@@ -34,7 +34,7 @@ export class Zelem {
     return this.rtm.start();
   }
 
-  public async askQuestion(messageText: string) {
+  async askQuestion(messageText: string) {
     if (this.messageIsInProgress()) {
       return;
     }
