@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as bodyParser from 'body-parser';
-import dotenv from 'dotenv';
+import dotenv = require('dotenv');
 import * as express from 'express';
 
 import { Zelem } from './zelem';

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import shuffle from 'shuffle-array';
+import shuffle = require('shuffle-array');
 
 import { Zelem } from '.';
 import { TotallyOriginalQuestion } from './original-question';
