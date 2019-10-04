@@ -4,7 +4,7 @@ import dotenv = require('dotenv');
 import * as express from 'express';
 
 import { Zelem } from './apps/zelem';
-import loadPython from './utils/load-python';
+import loadPython from './loaders/load-python';
 
 const MINUTE = 60 * 1000;
 
