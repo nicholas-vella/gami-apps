@@ -1,7 +1,7 @@
-import { PythonShell } from 'python-shell';
+import { Options, PythonShell } from 'python-shell';
 
 const runPythonApp = (path, options = {}) => {
-  const DEFAULT_OPTIONS: any = {
+  const DEFAULT_OPTIONS: Options = {
     mode: 'text',
     pythonOptions: ['-u'],
   };
