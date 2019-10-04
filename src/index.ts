@@ -4,7 +4,7 @@ import dotenv = require('dotenv');
 import * as express from 'express';
 
 import { Zelem } from './apps/zelem';
-import loadPython from './loaders/load-python';
+import loadPythonApps from './utils/load-python-apps';
 
 const MINUTE = 60 * 1000;
 
@@ -12,6 +12,8 @@ dotenv.config();
 main();
 
 function main() {
+  const pythonApps = ['python_test']; // Add python app dir name(s) into this array
+
   const app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -19,9 +21,9 @@ function main() {
     res.send('Sup');
   });
 
-  const zel = new Zelem();
+  loadPythonApps(pythonApps);
 
-  loadPython('./src/apps/python_test/index.py');
+  const zel = new Zelem();
 
   (async () => {
     await zel.start(app);

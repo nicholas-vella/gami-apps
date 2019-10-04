@@ -1,6 +1,6 @@
 import { PythonShell } from 'python-shell';
 
-const loadPython = (path, options = {}) => {
+const runPythonApp = (path, options = {}) => {
   const DEFAULT_OPTIONS: any = {
     mode: 'text',
     pythonOptions: ['-u'],
@@ -15,4 +15,4 @@ const loadPython = (path, options = {}) => {
   });
 };
 
-export default loadPython;
+export default runPythonApp;
