@@ -3,7 +3,8 @@ import * as bodyParser from 'body-parser';
 import dotenv = require('dotenv');
 import * as express from 'express';
 
-import { Zelem } from './zelem';
+import { Zelem } from './apps/zelem';
+import loadPython from './utils/load-python';
 
 const MINUTE = 60 * 1000;
 
@@ -19,6 +20,8 @@ function main() {
   });
 
   const zel = new Zelem();
+
+  loadPython('./src/apps/python_test/index.py');
 
   (async () => {
     await zel.start(app);
