@@ -2,7 +2,7 @@ import { RTMClient } from '@slack/rtm-api';
 import { WebAPICallResult, WebClient } from '@slack/web-api';
 import * as express from 'express';
 
-import { MessageEvent } from '../_models/message-event';
+import { MessageEvent } from '../../_models/message-event';
 import { displaySentience } from './sentience';
 
 export class Zelem {
