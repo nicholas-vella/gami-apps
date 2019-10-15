@@ -116,10 +116,19 @@ export class Zelem {
 
   private async sayGoodbye(byUser: string) {
     const channel = this.idsByChannel.get('weegee');
+
+    const matchUnderscoreBlock = /_{2,}/; // Finds an underscore block ('____');
+    const questionHasUnderscores = matchUnderscoreBlock.test(this.currentQuestion);
+
+    const outputText = questionHasUnderscores
+      ? this.currentQuestion.replace(matchUnderscoreBlock, `*${this.currentMessage}*`)
+      : `${this.currentQuestion} *${this.currentMessage}*.`;
+
     await this.wc.chat.postMessage({
       channel,
-      text: `Zelem says: *${this.currentMessage}*. (Ended by <@${byUser}>)`,
+      text: `Zelem says: ${outputText} (Ended by <@${byUser}>)`,
     });
+
     this.currentMessage = undefined;
     this.currentMessage = undefined;
     this.lastMessageUser = undefined;
