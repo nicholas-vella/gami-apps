@@ -117,17 +117,18 @@ export class Zelem {
   private async sayGoodbye(byUser: string) {
     const channel = this.idsByChannel.get('weegee');
 
+    const questionLastChar = this.currentQuestion.substr(-1);
+    const promptHasPunctuation = questionLastChar === '.' || questionLastChar === '?';
+
     const regexTest = /_{2,}/; // Finds an underscore block ('____');
 
-    // Checks if there's a match for a bunch of underscores, if so replace them with the message.
-    // Otherwise just append the message after the question.
     const outputText = regexTest.test(this.currentQuestion)
       ? this.currentQuestion.replace(regexTest, `*${this.currentMessage}*`)
       : `${this.currentQuestion} *${this.currentMessage}*`;
 
     await this.wc.chat.postMessage({
       channel,
-      text: `Zelem says: ${outputText}. (Ended by <@${byUser}>)`,
+      text: `Zelem says: ${outputText}${!promptHasPunctuation && '.'} (Ended by <@${byUser}>)`,
     });
 
     this.currentMessage = undefined;
