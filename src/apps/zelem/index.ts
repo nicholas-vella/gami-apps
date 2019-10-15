@@ -121,8 +121,9 @@ export class Zelem {
     const promptHasPunctuation = questionLastChar === '.' || questionLastChar === '?';
 
     const regexTest = /_{2,}/; // Finds an underscore block ('____');
+    const questionHasUnderscores = regexTest.test(this.currentQuestion);
 
-    const outputText = regexTest.test(this.currentQuestion)
+    const outputText = questionHasUnderscores
       ? this.currentQuestion.replace(regexTest, `*${this.currentMessage}*`)
       : `${this.currentQuestion} *${this.currentMessage}*`;
 
