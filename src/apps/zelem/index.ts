@@ -117,11 +117,11 @@ export class Zelem {
   private async sayGoodbye(byUser: string) {
     const channel = this.idsByChannel.get('weegee');
 
-    const regexTest = /_{2,}/; // Finds an underscore block ('____');
-    const questionHasUnderscores = regexTest.test(this.currentQuestion);
+    const matchUnderscoreBlock = /_{2,}/; // Finds an underscore block ('____');
+    const questionHasUnderscores = matchUnderscoreBlock.test(this.currentQuestion);
 
     const outputText = questionHasUnderscores
-      ? this.currentQuestion.replace(regexTest, `*${this.currentMessage}*`)
+      ? this.currentQuestion.replace(matchUnderscoreBlock, `*${this.currentMessage}*`)
       : `${this.currentQuestion} *${this.currentMessage}*.`;
 
     await this.wc.chat.postMessage({
