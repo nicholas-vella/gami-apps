@@ -7,7 +7,7 @@ import { displaySentience } from './sentience';
 
 export class Zelem {
   private readonly token = process.env.ZELEM_SLACK_KEY;
-  private readonly underscoreBlock = /_{2,}/g;
+  private readonly underscoreBlockRegex = /_{2,}/g;
   private wc = new WebClient(this.token);
   private rtm = new RTMClient(this.token);
   private channelsById = new Map<string, string>();
@@ -118,7 +118,7 @@ export class Zelem {
   private async sayGoodbye(byUser: string) {
     const channel = this.idsByChannel.get('weegee');
 
-    const matchUnderscoreBlock = new RegExp(this.underscoreBlock);
+    const matchUnderscoreBlock = new RegExp(this.underscoreBlockRegex);
     const questionHasUnderscores = matchUnderscoreBlock.test(this.currentQuestion);
 
     const outputText = questionHasUnderscores
@@ -144,8 +144,8 @@ export class Zelem {
   }
 
   private messageIsUnderstood(messageText: string) {
-    const findUnderscoreBlocks = new RegExp(this.underscoreBlock);
-    return messageText.endsWith('?') || messageText.match(findUnderscoreBlocks).length === 1;
+    const matchUnderscoreBlocks = new RegExp(this.underscoreBlockRegex);
+    return messageText.endsWith('?') || messageText.match(matchUnderscoreBlocks).length === 1;
   }
 
   private messageIsACallForWisdom(message: MessageEvent) {
