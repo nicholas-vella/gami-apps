@@ -7,6 +7,7 @@ import { displaySentience } from './sentience';
 
 export class Zelem {
   private readonly token = process.env.ZELEM_SLACK_KEY;
+  private readonly underscoreBlock = /_{2,}/g;
   private wc = new WebClient(this.token);
   private rtm = new RTMClient(this.token);
   private channelsById = new Map<string, string>();
@@ -77,7 +78,7 @@ export class Zelem {
   }
 
   private tryAsk(question: string) {
-    if (question.endsWith('?') && !this.messageIsInProgress()) {
+    if (this.messageIsUnderstood(question) && !this.messageIsInProgress()) {
       this.askQuestion(question);
     }
   }
@@ -117,7 +118,7 @@ export class Zelem {
   private async sayGoodbye(byUser: string) {
     const channel = this.idsByChannel.get('weegee');
 
-    const matchUnderscoreBlock = /_{2,}/; // Finds an underscore block ('____');
+    const matchUnderscoreBlock = new RegExp(this.underscoreBlock);
     const questionHasUnderscores = matchUnderscoreBlock.test(this.currentQuestion);
 
     const outputText = questionHasUnderscores
@@ -142,8 +143,13 @@ export class Zelem {
     return message.subtype === 'bot_message';
   }
 
+  private messageIsUnderstood(messageText: string) {
+    const findUnderscoreBlocks = new RegExp(this.underscoreBlock);
+    return messageText.endsWith('?') || messageText.match(findUnderscoreBlocks).length === 1;
+  }
+
   private messageIsACallForWisdom(message: MessageEvent) {
-    return typeof this.channelsById.get(message.channel) === 'undefined' && message.text.endsWith('?');
+    return typeof this.channelsById.get(message.channel) === 'undefined' && this.messageIsUnderstood(message.text);
   }
 
   private messageIsDivine(message: MessageEvent): boolean {
