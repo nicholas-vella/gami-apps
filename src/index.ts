@@ -12,7 +12,7 @@ dotenv.config();
 main();
 
 function main() {
-  const pythonApps = ['python_test']; // Add python app dir name(s) into this array
+  const pythonApps = ['python_test','parliament']; // Add python app + parliament dir name(s) into this array
 
   const app = express();
   app.use(bodyParser.urlencoded({ extended: true }));
