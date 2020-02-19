@@ -5,6 +5,8 @@ import * as express from 'express';
 import { MessageEvent } from '../../_models/message-event';
 import { displaySentience } from './sentience';
 
+import { letterScores } from './scrabble-data';
+
 export class Zelem {
   private readonly token = process.env.ZELEM_SLACK_KEY;
   private readonly underscoreBlockRegex = /_{2,}/g;
@@ -41,7 +43,7 @@ export class Zelem {
     }
 
     const channel = this.idsByChannel.get('weegee');
-    const letter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    const letter = this.getWeightedLetter();
 
     this.currentQuestion = messageText;
     this.currentMessage = letter;
@@ -55,6 +57,18 @@ export class Zelem {
       channel,
       text: letter,
     });
+  }
+
+  private getWeightedLetter() {
+    const lettersArray = [];
+    letterScores.forEach(letterScore => {
+      const weight = 11 - letterScore.score;
+      let i;
+      for (i = 0; i < weight; i++) {
+        lettersArray.push(letterScore.letter);
+      }
+    });
+    return lettersArray[Math.floor(Math.random() * lettersArray.length)];
   }
 
   private registerEndpoints(app: express.Express) {
